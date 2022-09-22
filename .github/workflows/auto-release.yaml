@@ -14,5 +14,5 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-unstable
       - run: |
-          env GITHUB_TOKEN=${{ env.GITHUB_TOKEN }} GITHUB_REPOSITORY=${{ env.repository }} ./update_release.py
+          ./update_release.py
           nix flake check
