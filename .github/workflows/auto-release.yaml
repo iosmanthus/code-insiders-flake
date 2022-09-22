@@ -1,4 +1,4 @@
-name: "Test"
+name: "Auto release"
 on:
   push:
   schedule:
