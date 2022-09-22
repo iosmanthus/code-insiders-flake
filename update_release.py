@@ -17,9 +17,10 @@ github_repo = os.getenv('GITHUB_REPOSITORY')
 today = datetime.date.today()
 asset_name = 'code-insiders.tar.gz'
 
-subprocess.run('git config user.name "github-actions[bot]"')
+subprocess.run('git config user.name "github-actions[bot]"'.split())
 subprocess.run(
-    'git config user.email "github-actions[bot]@users.noreply.github.com')
+    'git config user.email "github-actions[bot]@users.noreply.github.com'.
+    split())
 
 
 def make_meta(version: str, sha256: str) -> dict:
