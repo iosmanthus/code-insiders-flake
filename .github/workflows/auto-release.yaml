@@ -9,7 +9,7 @@ env:
   GITHUB_REPOSITORY: ${{ github.repository }}
 
 jobs:
-  tests:
+  auto-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
