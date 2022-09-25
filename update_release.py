@@ -93,7 +93,7 @@ def main(metafile: str, tmpdir: str):
     update_local_meta(metafile, remote_meta)
     commit(
         metafile,
-        f"update code from {local_meta['version']} to {remote_meta['version']}"
+        f"update snapshot of code-insiders at {today} to {remote_meta['version']}"
     )
 
     create_github_release(local_file, metafile, remote_meta)
