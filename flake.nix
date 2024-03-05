@@ -1,10 +1,12 @@
 {
   description = "Nix Flake for Code Insider";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/master";
-    flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs.url = "github:NixOS/nixpkgs?pull=293460";
   };
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs =
+    { self
+    , nixpkgs
+    }:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -14,7 +16,7 @@
       meta = builtins.fromJSON (builtins.readFile ./meta.json);
       package = (pkgs.vscode.override {
         isInsiders = true;
-      }).overrideAttrs (oldAttrs: rec {
+      }).overrideAttrs (oldAttrs: {
         pname = "vscode-insiders";
         src = (builtins.fetchurl {
           url = meta.url;
