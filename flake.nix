@@ -23,6 +23,7 @@
           sha256 = meta.sha256;
         });
         version = meta.version;
+        meta.mainProgram = "code-insiders";
       });
     in
     {
