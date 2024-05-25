@@ -1,20 +1,20 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i python3 -p python3Packages.PyGithub -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz
 
-import datetime
 import github
 import json
 import os
 import subprocess
 import tempfile
 
+from datetime import datetime
 from github import Github
 from urllib.request import urlretrieve
 
 token = os.getenv('GITHUB_TOKEN')
 github_repo = os.getenv('GITHUB_REPOSITORY')
 
-today = datetime.date.today()
+release_time = datetime.now().strftime("%Y%m%d%H%M%S")
 asset_name = 'code-insiders.tar.gz'
 
 subprocess.run('git config user.name "github-actions[bot]"'.split())
@@ -30,7 +30,7 @@ def make_meta(version: str, sha256: str) -> dict:
         'sha256':
         sha256,
         'url':
-        f'https://github.com/{github_repo}/releases/download/{today}/{asset_name}'
+        f'https://github.com/{github_repo}/releases/download/{release_time}/{asset_name}'
     }
 
 
@@ -72,9 +72,9 @@ def create_github_release(local_artifact: str, metafile: str, meta: dict):
 
     print('creating release')
     release = repo.create_git_release(
-        tag=f'{today}',
+        tag=f'{release_time}',
         name=meta['version'],
-        message=f'snapshot of code-insiders at {today}',
+        message=f'snapshot of code-insiders at {release_time}',
         target_commitish='main',
         draft=False,
         prerelease=False)
@@ -93,7 +93,7 @@ def main(metafile: str, tmpdir: str):
     update_local_meta(metafile, remote_meta)
     commit(
         metafile,
-        f"update snapshot of code-insiders at {today} to {remote_meta['version']}"
+        f"update snapshot of code-insiders at {release_time} to {remote_meta['version']}"
     )
 
     create_github_release(local_file, metafile, remote_meta)
