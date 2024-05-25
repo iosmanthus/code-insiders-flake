@@ -82,6 +82,11 @@ def create_github_release(local_artifact: str, metafile: str, meta: dict):
     print('upload assets to GitHub Release')
     release.upload_asset(local_artifact, name=asset_name)
 
+def update_flake_input(input: str):
+    subprocess.run(['nix', 'flake', 'update', '--update-input', input])
+
+def check():
+    subprocess.run(['nix', 'flake', 'check'])
 
 def main(metafile: str, tmpdir: str):
     remote_meta, local_file = download_insiders(tmpdir)
@@ -91,6 +96,8 @@ def main(metafile: str, tmpdir: str):
         return
 
     update_local_meta(metafile, remote_meta)
+    update_flake_input('nixpkgs')
+
     commit(
         metafile,
         f"update snapshot of code-insiders at {release_time} to {remote_meta['version']}"
