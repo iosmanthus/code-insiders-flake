@@ -4,8 +4,9 @@
     nixpkgs.url = "github:NixOS/nixpkgs";
   };
   outputs =
-    { self
-    , nixpkgs
+    {
+      self,
+      nixpkgs,
     }:
     let
       system = "x86_64-linux";
@@ -14,17 +15,28 @@
         config.allowUnfree = true;
       };
       meta = builtins.fromJSON (builtins.readFile ./meta.json);
-      package = (pkgs.vscode.override {
-        isInsiders = true;
-      }).overrideAttrs (oldAttrs: {
-        pname = "vscode-insiders";
-        src = (builtins.fetchurl {
-          url = meta.url;
-          sha256 = meta.sha256;
-        });
-        version = meta.version;
-        meta.mainProgram = "code-insiders";
-      });
+      package =
+        (pkgs.vscode.override {
+          isInsiders = true;
+        }).overrideAttrs
+          (oldAttrs: {
+            pname = "vscode-insiders";
+            src = (
+              builtins.fetchurl {
+                url = meta.url;
+                sha256 = meta.sha256;
+              }
+            );
+            version = meta.version;
+            meta.mainProgram = "code-insiders";
+            buildInputs =
+              oldAttrs.buildInputs
+              ++ (with pkgs; [
+                curl
+                libsoup_3
+                webkitgtk_4_1
+              ]);
+          });
     in
     {
       overlays.default = final: prev: {
