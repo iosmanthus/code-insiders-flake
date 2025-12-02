@@ -1,5 +1,6 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p python3Packages.pygithub -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz
+#! nix-shell -i python3 -p python3Packages.pygithub -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/2d293cb.tar.gz
+# 2025-11-30
 
 import github
 import json
